@@ -30,6 +30,7 @@ jobs:
 
       # Construire l'image Docker
       - name: Build Docker image
+        working-directory: ./function_image1
         run: |
           docker build -t ${{ secrets.MY_CONTAINER }}/day-function:latest .
 
