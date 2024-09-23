@@ -1,17 +1,18 @@
-# Utiliser une image de base légère avec Python 3.9
+# Utiliser une image de base Python légère
 FROM python:3.9-slim
 
-# Définir le répertoire de travail dans le conteneur
+# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier le fichier app.py dans le répertoire de travail du conteneur
-COPY app.py .
+# Copier les fichiers dans le conteneur
+COPY requirements.txt /app/
+COPY day.py /app/
 
-# Installer Flask
-RUN pip install flask
+# Installer les dépendances
+RUN pip install -r requirements.txt
 
 # Exposer le port 8080
 EXPOSE 8080
 
-# Lancer l'application Flask
-CMD ["python", "app.py"]
+# Commande d'exécution
+CMD ["python", "day.py"]
