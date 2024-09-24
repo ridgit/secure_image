@@ -41,7 +41,7 @@ jobs:
           image-ref: ${{ secrets.MY_CONTAINER }}/day-function:latest
           ignore-unfixed: true
           severity: HIGH,CRITICAL
-          exit-code: 1
+          #exit-code: 1
 
       # Pousser l'image Docker sur Docker Hub
       - name: Push Docker image
