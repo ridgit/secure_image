@@ -6,7 +6,7 @@ on:
       - main  # Déclenche le pipeline sur les commits dans la branche main
     paths:
       - "function_image1/**"
-  workflow_dispatch:  # Permet de déclencher manuellement le workflow depuis GitHub Actions
+ # workflow_dispatch:  # Permet de déclencher manuellement le workflow depuis GitHub Actions
 
 jobs:
   build-and-scan:
@@ -39,8 +39,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.MY_CONTAINER }}/day-function:latest
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+          exit-code: 1
 
       # Pousser l'image Docker sur Docker Hub
       - name: Push Docker image
+        if: success()  # Exécuter seulement si le scan Trivy réussit
         run: |
           docker push ${{ secrets.MY_CONTAINER }}/day-function:latest
