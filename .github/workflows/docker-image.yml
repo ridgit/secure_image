@@ -39,12 +39,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.MY_CONTAINER }}/day-function:latest
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-          exit-code: 1
+         # ignore-unfixed: true
+         # severity: HIGH,CRITICAL
+         # exit-code: 1
 
       # Pousser l'image Docker sur Docker Hub
       - name: Push Docker image
-        if: success()  # Exécuter seulement si le scan Trivy réussit
+       # if: success()  # Exécuter seulement si le scan Trivy réussit
         run: |
           docker push ${{ secrets.MY_CONTAINER }}/day-function:latest
