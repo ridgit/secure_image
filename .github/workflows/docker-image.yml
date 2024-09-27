@@ -4,13 +4,43 @@ on:
   push:
     branches:
       - main  # Déclenche le pipeline sur les commits dans la branche main
-  #  paths:
+      #  paths:
   #    - "function_image1/**"
-  workflow_dispatch:  # Permet de déclencher manuellement le workflow depuis GitHub Actions
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
-  build-and-scan:
+  # Job d'analyse CodeQL
+  codeql-analysis:
+    name: Analyze Code with CodeQL
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: true  # Arrête le job dès qu'une erreur est rencontrée
+      matrix:
+        language: [ 'javascript', 'python', 'go', 'java' ]  # Spécifiez les langages à analyser
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}  # Spécifiez les langages à analyser
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: security  # Catégorie d'analyse orientée sécurité
+        continue-on-error: false  # Stoppe l'exécution du job si une vulnérabilité critique est détectée
+
+  # Job de build et scan Docker, qui s'exécute seulement si le job codeql-analysis réussit
+  build-and-scan:
+    needs: codeql-analysis  # Dépend du job codeql-analysis
+    runs-on: ubuntu-latest
+    if: ${{ needs.codeql-analysis.result == 'success' }}  # S'exécute seulement si codeql-analysis a réussi
     
     steps:
       # Checkout du dépôt
