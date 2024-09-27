@@ -12,7 +12,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 
-# Connexion à la base de données
+def get_date_time():
+    # Connexion à la base de données
     try:
         connection = mysql.connector.connect(
             host=DB_HOST,
@@ -39,7 +40,6 @@ app = Flask(__name__)
 
     return jsonify(date_time_info), 200
 """
-def get_date_time():
     now = datetime.now()
     date_time_info = {
         "date": now.strftime("%Y-%m-%d"),
