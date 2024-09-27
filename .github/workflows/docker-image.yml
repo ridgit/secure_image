@@ -6,7 +6,7 @@ on:
       - main  # Déclenche le pipeline sur les commits dans la branche main
   #  paths:
   #    - "function_image1/**"
- # workflow_dispatch:  # Permet de déclencher manuellement le workflow depuis GitHub Actions
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow depuis GitHub Actions
 
 jobs:
   build-and-scan:
