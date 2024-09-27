@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: true  # Arrête le job dès qu'une erreur est rencontrée
       matrix:
-        language: [ 'javascript', 'python', 'go', 'java' ]  # Spécifiez les langages à analyser
+        language: [ 'javascript', 'python', 'java' ]  # Spécifiez les langages à analyser
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
