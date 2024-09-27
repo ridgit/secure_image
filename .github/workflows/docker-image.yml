@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main  # Déclenche le pipeline sur les commits dans la branche main
-      #  paths:
-  #    - "function_image1/**"
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
@@ -17,24 +15,24 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    strategy:
-      fail-fast: true  # Arrête le job dès qu'une erreur est rencontrée
-      #matrix:
-      #  language: [ 'javascript', 'python', 'java' ]  # Spécifiez les langages à analyser
+    #strategy:
+     # matrix:
+        # Remplacez par les langages présents dans votre projet
+       # language: [ 'python' ]  # Par exemple, spécifiez uniquement 'python'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4  # Passez à v3 pour utiliser Node.js 16 ou 20
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3  # Passez à v3
         with:
-          autobuild: true  # Détecte automatiquement les langages présents dans le projet languages: ${{ matrix.language }}  # Spécifiez les langages à analyser
+          #languages: ${{ matrix.language }}  # Spécifiez les langages à analyser
+          build-mode: autobuild  # Utilisez build-mode au lieu de autobuild
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3  # Passez à v3
         with:
           category: security  # Catégorie d'analyse orientée sécurité
-        continue-on-error: false  # Stoppe l'exécution du job si une vulnérabilité critique est détectée
 
   # Job de build et scan Docker, qui s'exécute seulement si le job codeql-analysis réussit
   build-and-scan:
