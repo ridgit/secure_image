@@ -27,7 +27,7 @@ jobs:
         uses: github/codeql-action/init@v3  # Passez à v3
         with:
           #languages: ${{ matrix.language }}  # Spécifiez les langages à analyser
-          build-mode: autobuild  # Utilisez build-mode au lieu de autobuild
+          build-mode: none  # Utilisez build-mode au lieu de autobuild
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3  # Passez à v3
