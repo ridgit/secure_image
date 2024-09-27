@@ -15,8 +15,9 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    #strategy:
-     # matrix:
+    strategy:
+      fail-fast: true  # Arrête le job dès qu'une erreur est rencontrée
+      #matrix:
         # Remplacez par les langages présents dans votre projet
        # language: [ 'python' ]  # Par exemple, spécifiez uniquement 'python'
     steps:
@@ -33,6 +34,7 @@ jobs:
         uses: github/codeql-action/analyze@v3  # Passez à v3
         with:
           category: security  # Catégorie d'analyse orientée sécurité
+        continue-on-error: false  # Stoppe l'exécution du job si une vulnérabilité critique est détectée
 
   # Job de build et scan Docker, qui s'exécute seulement si le job codeql-analysis réussit
   build-and-scan:
