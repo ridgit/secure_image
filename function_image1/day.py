@@ -2,17 +2,18 @@ from flask import Flask, jsonify
 from datetime import datetime
 import mysql.connector
 
-# Identifiants codés en dur (dangereux)
-DB_HOST = "localhost"
-DB_USER = "root"
-DB_PASSWORD = "password123"
-DB_NAME = "mydatabase"
+
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 
 def get_date_time():
+    # Identifiants codés en dur (dangereux)
+    DB_HOST = "localhost"
+    DB_USER = "root"
+    DB_PASSWORD = "password123"
+    DB_NAME = "mydatabase"
 
     # Connexion à la base de données
     try:
