@@ -1,3 +1,3 @@
 Flask
-setuptools>=60.0.0
+setuptools>=70.0.0
 mysql-connector-python
