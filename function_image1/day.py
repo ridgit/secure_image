@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 
 def get_date_time():
+    """
     # Identifiants codés en dur (dangereux)
     DB_HOST = "localhost"
     DB_USER = "root"
@@ -51,6 +52,6 @@ def get_date_time():
         "second": now.strftime("%S")
     }
     return jsonify(date_time_info), 200
-"""
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
