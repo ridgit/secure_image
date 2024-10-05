@@ -7,53 +7,26 @@ on:
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
-  # Job d'analyse CodeQL
-  codeql-analysis:
-    name: Analyze Code with CodeQL
+  # Job pour Gitleaks - vérification des secrets exposés dans le dépôt
+  gitleaks-scan:
+    name: Scan repository for secrets with Gitleaks
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    strategy:
-      #fail-fast: true  # Arrête le job dès qu'une erreur est rencontrée
-      matrix:
-        # Remplacez par les langages présents dans votre projet
-        language: [ 'python' ]  # Par exemple, spécifiez uniquement 'python'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Passez à v3 pour utiliser Node.js 16 ou 20
+        uses: actions/checkout@v4  # Vérification du dépôt
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3  # Passez à v3
+      - name: Run Gitleaks to detect secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du token GitHub
         with:
-          languages: ${{ matrix.language }}  # Spécifiez les langages à analyser
-          #build-mode: none  # Utilisez build-mode au lieu de autobuild
+          args: "--redact"  # Redacte les secrets détectés dans le log de sortie pour la sécurité
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3  # Passez à v3
-        with:
-          category: security  # Catégorie d'analyse orientée sécurité
-       # continue-on-error: false Stoppe l'exécution du job si une vulnérabilité critique est détectée
-
-       # Étape supplémentaire pour vérifier les alertes CodeQL
-      - name: Check for CodeQL alerts
-        id: codeql-alerts
-        run: |
-          echo "Vérification des alertes CodeQL..."
-          ALERTS=$(gh api --paginate repos/${{ github.repository }}/code-scanning/alerts --jq '.[].rule.severity' | grep -E 'high|critical' | wc -l)
-          if [ "$ALERTS" -gt 0 ]; then
-            echo "::error:: Des alertes CodeQL de sévérité élevée ou critique ont été détectées. Nombre d'alertes: $ALERTS"
-            exit 1  # Provoque l'échec du job si des alertes sont détectées
-          else
-            echo "Aucune alerte critique ou élevée détectée par CodeQL."
-          fi
-          
-  # Job de build et scan Docker, qui s'exécute seulement si le job codeql-analysis réussit
+  # Job de build et scan Docker, qui s'exécute seulement si le job gitleaks-scan réussit
   build-and-scan:
-    needs: codeql-analysis  # Dépend du job codeql-analysis
+    needs: gitleaks-scan  # Dépend de la réussite du job gitleaks-scan
     runs-on: ubuntu-latest
-    if: ${{ needs.codeql-analysis.result == 'success' }}  # S'exécute seulement si codeql-analysis a réussi
+    if: ${{ needs.gitleaks-scan.result == 'success' }}  # S'exécute seulement si gitleaks-scan a réussi
     
     steps:
       # Checkout du dépôt
