@@ -19,7 +19,7 @@ jobs:
         run: pip install truffleHog  # Installation de TruffleHog
 
       - name: Run TruffleHog to detect hardcoded credentials
-        run: trufflehog --json --regex . > trufflehog_results.json
+        run: trufflehog filesystem --json --repo_path . > trufflehog_results.json
 
       - name: Upload TruffleHog results
         if: failure()
