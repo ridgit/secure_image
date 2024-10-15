@@ -7,12 +7,33 @@ on:
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
+  # Job pour analyser les identifiants sécurisés dans le code
+  analyze-code:
+    name: Analyze Python code for secure credential usage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Vérification du dépôt
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      
+      - name: Install required packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install ast
+
+      - name: Run security analysis script
+        run: python analyze_credentials.py
+
   # Job pour Gitleaks - vérification des secrets exposés dans le dépôt
   gitleaks-scan:
     name: Scan repository for secrets with Gitleaks
     runs-on: ubuntu-latest
-    #needs: trufflehog-scan  # Dépend de la réussite du job trufflehog-scan
-    #if: ${{ needs.trufflehog-scan.result == 'success' }}  # S'exécute seulement si trufflehog-scan a réussi
+    needs: analyze-code  # Dépend de la réussite du job analyze-code
     
     steps:
       - name: Checkout code
@@ -27,33 +48,28 @@ jobs:
 
   # Job de build et scan Docker, qui s'exécute seulement si les jobs de scan réussissent
   build-and-scan:
-    needs: gitleaks-scan  # Dépend de la réussite des jobs trufflehog-scan et gitleaks-scan
+    needs: gitleaks-scan  # Dépend de la réussite des jobs analyze-code et gitleaks-scan
     runs-on: ubuntu-latest
     if: ${{ needs.gitleaks-scan.result == 'success' }}  # S'exécute seulement si les deux scans ont réussi
     
     steps:
-      # Checkout du dépôt
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Configuration de Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Connexion à Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Construire l'image Docker
       - name: Build Docker image
         working-directory: ./function_image1
         run: |
           docker build -t ${{ secrets.MY_CONTAINER }}/day-function:latest .
 
-      # Analyser l'image avec Trivy
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
@@ -62,7 +78,6 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: 1
 
-      # Pousser l'image Docker sur Docker Hub
       - name: Push Docker image
         if: success()  # Exécuter seulement si le scan Trivy réussit
         run: |
