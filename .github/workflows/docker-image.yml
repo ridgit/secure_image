@@ -5,6 +5,11 @@ on:
     branches:
       - main  # Déclenche le pipeline sur les commits dans la branche main
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
+    inputs:
+      file_to_analyze:
+        description: 'Path of the Python file to analyze'
+        required: true
+        default: 'function_image1/day.py'
 
 jobs:
   # Job pour analyser les identifiants sécurisés dans le code
@@ -95,22 +100,19 @@ jobs:
                   self.visit(tree)
                   return self.service_security_report
 
-          def main():
-              for root, _, files in os.walk('.'):
-                  for file in files:
-                      if file.endswith('.py'):
-                          with open(os.path.join(root, file), 'r') as f:
-                              code = f.read()
-                              analyzer = ServiceConnectionAnalyzer()
-                              service_security_report = analyzer.analyze(code)
-                              for service, is_secure in service_security_report.items():
-                                  if not is_secure:
-                                      print(f'Les identifiants pour le service {service} ne sont pas sécurisés.')
-                                      exit(1)  # Quitte avec une erreur si un identifiant non sécurisé est trouvé
-                              print('Tous les services sont sécurisés pour le fichier:', file)
+          def main(file_to_analyze):
+              with open(file_to_analyze, 'r') as f:
+                  code = f.read()
+                  analyzer = ServiceConnectionAnalyzer()
+                  service_security_report = analyzer.analyze(code)
+                  for service, is_secure in service_security_report.items():
+                      if not is_secure:
+                          print(f'Les identifiants pour le service {service} ne sont pas sécurisés.')
+                          exit(1)  # Quitte avec une erreur si un identifiant non sécurisé est trouvé
+                  print('Tous les services sont sécurisés pour le fichier:', file_to_analyze)
 
           if __name__ == '__main__':
-              main()
+              main('${{ github.event.inputs.file_to_analyze }}')
           " > analyze_code.py
           
           python analyze_code.py
