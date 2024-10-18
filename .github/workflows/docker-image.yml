@@ -100,7 +100,8 @@ jobs:
                   self.visit(tree)
                   return self.service_security_report
 
-          def main(file_to_analyze):
+          def main():
+              file_to_analyze = 'function_image1/day.py'
               with open(file_to_analyze, 'r') as f:
                   code = f.read()
                   analyzer = ServiceConnectionAnalyzer()
@@ -112,7 +113,7 @@ jobs:
                   print('Tous les services sont sécurisés pour le fichier:', file_to_analyze)
 
           if __name__ == '__main__':
-              main('${{ github.event.inputs.file_to_analyze }}')
+              main()
           " > analyze_code.py
           
           python analyze_code.py
