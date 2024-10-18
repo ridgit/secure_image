@@ -19,22 +19,17 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def get_date_time():
-    """
-import os
-from minio import Minio
-from pymongo import MongoClient
-"""
-# Configuration de MinIO avec les secrets de Vault
-minio_client = Minio(
-    os.getenv("MINIO_ENDPOINT"),
-    access_key=os.getenv("MINIO_ACCESS_KEY"),
-    secret_key=os.getenv("MINIO_SECRET_KEY"),
-    secure=False
-)
+    # Configuration de MinIO avec les secrets de Vault
+    minio_client = Minio(
+        os.getenv("MINIO_ENDPOINT"),
+        access_key=os.getenv("MINIO_ACCESS_KEY"),
+        secret_key=os.getenv("MINIO_SECRET_KEY"),
+        secure=False
+    )
 
-# Configuration de MongoDB
-mongo_client = MongoClient("mongodb://user:pass@localhost:27017")
-    
+    # Configuration de MongoDB
+    mongo_client = MongoClient("mongodb://user:pass@localhost:27017")
+
     # Connexion à la base de données
     try:
         connection = mysql.connector.connect(
