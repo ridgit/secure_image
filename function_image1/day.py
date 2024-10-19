@@ -13,7 +13,6 @@ DB_PASSWORD = "password123"
 DB_NAME = "mydatabase"
 """
 # Mauvaise pratique: stockage en dur du token API
-#API_TOKEN = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
 
 app = Flask(__name__)
 
