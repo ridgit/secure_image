@@ -5,13 +5,13 @@ import requests
 import os
 from minio import Minio
 from pymongo import MongoClient
-
+"""
 # Identifiants codés en dur (dangereux)
 DB_HOST = "localhost"
 DB_USER = "root"
 DB_PASSWORD = "password123"
 DB_NAME = "mydatabase"
-
+"""
 # Mauvaise pratique: stockage en dur du token API
 #API_TOKEN = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
 
@@ -53,8 +53,8 @@ def get_date_time():
         cursor.close()
         connection.close()
     except mysql.connector.Error as err:
-        return jsonify({"error": str(err)}), 500
-
+       # return jsonify({"error": str(err)}), 500
+"""
     # Appel à une API externe avec un token codé en dur
     api_url = "https://api.exemple.com/v1/data"
     headers = {
@@ -72,6 +72,6 @@ def get_date_time():
         date_time_info["api_error"] = str(e)
 
     return jsonify(date_time_info), 200
-
+"""
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
