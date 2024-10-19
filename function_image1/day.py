@@ -28,7 +28,7 @@ def get_date_time():
     )
 
     # Configuration de MongoDB
-    mongo_client = MongoClient("mongodb://user:pass@localhost:27017")
+   # mongo_client = MongoClient("mongodb://user:pass@localhost:27017")
 
     # Connexion à la base de données
     try:
