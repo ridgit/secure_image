@@ -53,7 +53,7 @@ def get_date_time():
         cursor.close()
         connection.close()
     except mysql.connector.Error as err:
-       # return jsonify({"error": str(err)}), 500
+        return jsonify({"error": str(err)}), 500
 """
     # Appel à une API externe avec un token codé en dur
     api_url = "https://api.exemple.com/v1/data"
