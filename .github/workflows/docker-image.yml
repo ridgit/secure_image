@@ -31,12 +31,14 @@ jobs:
           python evil_pypi_packages.py
 
       - name: Commit updated requirements.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           git add evaluate_work/requirements.txt
           git commit -m "Update requirements.txt with evil packages"
-          git push
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/ridgit/secure_image.git
 
   # Job pour analyser les identifiants sécurisés dans le code
   analyze-code:
