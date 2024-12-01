@@ -1,8 +1,13 @@
 setuptools<70.0.0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 urlib3
 tornado-http
 =======
 pyppyn
 djang0
+>>>>>>> Stashed changes
+=======
+matplolib
+jeilyfish
 >>>>>>> Stashed changes
