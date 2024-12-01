@@ -16,19 +16,21 @@ evil_packages = [
 
 # Lire les dépendances existantes
 with open(input_file, "r") as file:
-    legal_packages = file.readlines()
+    existing_packages = file.readlines()
 
 # Nettoyer les dépendances existantes
-legal_packages = [pkg.strip() for pkg in legal_packages if pkg.strip()]
+existing_packages = [pkg.strip() for pkg in existing_packages if pkg.strip()]
 
-# Mélanger les packages pour créer un fichier dynamique
-# Combiner les packages légaux avec une sélection aléatoire de packages malveillants
-final_packages = legal_packages + random.sample(evil_packages, 2)
+# Ajouter les packages malveillants (échantillon aléatoire)
+# Si vous voulez les ajouter dynamiquement, utilisez random.sample(evil_packages, X)
+final_packages = existing_packages + random.sample(evil_packages, 2)
+
+# Supprimer les doublons tout en conservant l'ordre des packages
+unique_packages = list(dict.fromkeys(final_packages))
 
 # Générer le nouveau fichier requirements.txt (écrase l'ancien fichier)
 with open(input_file, "w") as file:
-    for package in final_packages:
+    for package in unique_packages:
         file.write(f"{package}\n")
 
-print("Fichier requirements.txt mis à jour avec des packages malveillants ajoutés.")
-
+print("Fichier requirements.txt mis à jour sans doublons, avec des packages malveillants ajoutés.")
