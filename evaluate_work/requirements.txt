@@ -1,8 +1,1 @@
 setuptools<70.0.0
-<<<<<<< Updated upstream
-pandas==1.1.0
-matplotlib==3.3.0
-=======
-django==2.0.0
-scipy==1.5.2
->>>>>>> Stashed changes
