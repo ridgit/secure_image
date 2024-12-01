@@ -5,15 +5,6 @@ input_file = "evaluate_work/requirements.txt"
 
 # Liste de versions vulnérables ou malveillantes de packages
 evil_packages = [
-    """
-    "requests==2.19.0",  
-    "flask==0.12.2", 
-    "django==2.0.0", 
-    "numpy==1.19.4", 
-    "pandas==1.1.0",
-    "scipy==1.5.2",
-    "matplotlib==3.3.0",
-    """
     "reqeusts",
     "urlib3",
     "djang0",
