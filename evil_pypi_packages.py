@@ -45,5 +45,3 @@ unique_packages = list(dict.fromkeys(final_packages))
 with open(input_file, "w") as file:
     for package in unique_packages:
         file.write(f"{package}\n")
-
-print("Fichier requirements.txt mis à jour sans doublons, avec des packages malveillants ajoutés.")
