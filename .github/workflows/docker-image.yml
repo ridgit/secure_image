@@ -102,7 +102,7 @@ jobs:
       - name: Build Docker image
         working-directory: ./evaluate_work
         run: |
-          docker build -t ${{ secrets.MY_CONTAINER }}//slftest:latest .
+          docker build -t ${{ secrets.MY_CONTAINER }}/slftest:latest .
 
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
