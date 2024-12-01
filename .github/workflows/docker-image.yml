@@ -9,7 +9,7 @@ on:
       file_to_analyze:
         description: 'Path of the Python file to analyze'
         required: true
-        default: 'function_image1/day.py'
+        default: 'evaluate_work/test1.py'
 
 jobs:
   # Job pour ajouter des evil packages à requirements.txt
@@ -100,14 +100,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        working-directory: ./function_image1
+        working-directory: ./evaluate_work
         run: |
-          docker build -t ${{ secrets.MY_CONTAINER }}/day-function:latest .
+          docker build -t ${{ secrets.MY_CONTAINER }}//slftest:latest .
 
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.MY_CONTAINER }}/day-function:latest
+          image-ref: ${{ secrets.MY_CONTAINER }}/slftest:latest
           ignore-unfixed: true
           severity: HIGH,CRITICAL
           exit-code: 1
@@ -115,4 +115,4 @@ jobs:
       - name: Push Docker image
         if: success()  # Exécuter seulement si le scan Trivy réussit
         run: |
-          docker push ${{ secrets.MY_CONTAINER }}/day-function:latest
+          docker push ${{ secrets.MY_CONTAINER }}//slftest:latest
