@@ -1,11 +1,1 @@
 setuptools<70.0.0
-urlib3
-tornado-http
-<<<<<<< Updated upstream
-aiohttp-sessions
-=======
-pyppyn
->>>>>>> Stashed changes
-pkg-lib
-flask==0.12.2
-pandas==1.1.0
