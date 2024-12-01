@@ -43,7 +43,7 @@ jobs:
   analyze-code:
     name: Analyze Python code for secure credential usage
     runs-on: ubuntu-latest
-    #needs: add-evil-packages  # Dépend de l'ajout des evil packages
+    needs: add-evil-packages  # Dépend de l'ajout des evil packages
     
     steps:
       - name: Checkout code
