@@ -1,7 +1,7 @@
 import random
 
 # Chemin du fichier requirements existant
-input_file = "requirements.txt"
+input_file = "evaluate_work/requirements.txt"
 
 # Liste de versions vulnérables ou malveillantes de packages
 evil_packages = [
