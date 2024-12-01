@@ -28,7 +28,7 @@ jobs:
 
       - name: Add Evil PyPI Packages
         run: |
-          python secure_image/evil_pypi_packages.py
+          python evil_pypi_packages.py
 
       - name: Commit updated requirements.txt
         run: |
