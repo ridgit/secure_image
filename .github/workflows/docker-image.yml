@@ -12,10 +12,37 @@ on:
         default: 'function_image1/day.py'
 
 jobs:
+  # Job pour ajouter des evil packages à requirements.txt
+  add-evil-packages:
+    name: Add Evil PyPI Packages
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Vérification du dépôt
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+
+      - name: Add Evil PyPI Packages
+        run: |
+          python evil_pypi_packages.py
+
+      - name: Commit updated requirements.txt
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add secure_image/function_image1/requirements.txt
+          git commit -m "Update requirements.txt with evil packages"
+          git push
+
   # Job pour analyser les identifiants sécurisés dans le code
   analyze-code:
     name: Analyze Python code for secure credential usage
     runs-on: ubuntu-latest
+    needs: add-evil-packages  # Dépend de l'ajout des evil packages
     
     steps:
       - name: Checkout code
@@ -33,6 +60,7 @@ jobs:
 
       - name: Run security analysis script
         run: python analyze_credentials.py
+
   # Job pour Gitleaks - vérification des secrets exposés dans le dépôt
   gitleaks-scan:
     name: Scan repository for secrets with Gitleaks
