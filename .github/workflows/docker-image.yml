@@ -9,7 +9,7 @@ on:
       file_to_analyze:
         description: 'Path of the Python file to analyze'
         required: true
-        default: 'evaluate_work/test1.py'
+        default: './evaluate_work/test1.py'
 
 jobs:
   # Job pour ajouter des evil packages à requirements.txt
