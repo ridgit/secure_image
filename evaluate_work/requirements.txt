@@ -1,4 +1,1 @@
 setuptools<70.0.0
-urlib3
-tornado-http
-jeilyfish
